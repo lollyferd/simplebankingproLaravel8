@@ -33,7 +33,7 @@ class CreateInvestmentsTable extends Migration
             $table->timestamps();
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      *

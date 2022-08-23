@@ -32,7 +32,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
           
            
-            <a class="dropdown-item inerlinkdropdown linkmenu" href="#">Loan Approval</a>
+            <a class="dropdown-item inerlinkdropdown linkmenu" href="{{ url('Loan-Approval') }}">Loan Approval</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item inerlinkdropdown linkmenu" href="{{ url('FD-Approval') }}">Investment Approval</a>
             <div class="dropdown-divider"></div>
@@ -51,7 +51,7 @@
            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
            
             
-             <a class="dropdown-item inerlinkdropdown linkmenu" href="#">Loan Reversal</a>
+             <a class="dropdown-item inerlinkdropdown linkmenu" href="{{ url('loanreversal') }}">Loan Reversal</a>
              <div class="dropdown-divider"></div>
              <a class="dropdown-item inerlinkdropdown linkmenu" href="#">Investment Reversal</a>
              <div class="dropdown-divider"></div>

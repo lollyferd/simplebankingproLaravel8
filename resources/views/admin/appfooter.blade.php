@@ -844,7 +844,105 @@ if ($intT!='') {
 
 $("#totalrepay").val($totalrepay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
-$('#acctnoloan').val(rsp.myout[0].customerid);
+$('#customerid').val(rsp.myout[0].customerid);
+
+$('#firstdate').val(rsp.date);
+
+  },
+
+  error:function(err){
+    console.log(err)
+    //err is the response from the server if there is an error
+  },
+  beforeSend:function(){
+    
+  }
+});
+
+};
+
+
+
+function loandisplayR() {
+  formated_data = $('#loanbookingformR').serialize();
+  
+//alert(formated_data);
+$.ajax({
+  
+  type: 'POST',
+      url: "/loandisplay",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
+
+//alert(rsp);
+
+
+   $('#acctnameloan').val(rsp.myout[0].surname+' '+rsp.myout[0].othername);
+
+   $('#acctbal').val(rsp.myout[0].bal);
+
+
+$('#customerid').val(rsp.myout[0].customerid);
+
+
+$('#firstdate').val(rsp.date);
+  },
+
+  error:function(err){
+    console.log(err)
+    //err is the response from the server if there is an error
+  },
+  beforeSend:function(){
+    
+  }
+});
+
+};
+   
+
+function loanapprovalcheck(){
+  formated_data = $('#loandisplay').serialize();
+ 
+//alert(formated_data);
+$.ajax({
+  
+  type: 'POST',
+      url: "/loanapprovaldisplay",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
+
+ //console.log(rsp.myout[0].ref);
+//alert(rsp.myout[0].ref);
+
+$('#refaploan').val(rsp.myout[0].ref);
+
+$('#nubanap').val(rsp.myout[0].nuban);
+
+$('#acctnameloan').val(rsp.myout[0].acctname);
+
+$('#loanamtap').val(rsp.myout[0].tp.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+$('#rateap').val(rsp.myout[0].loanrate);
+
+$totalmdeduct= +rsp.myout[0].mpd + +rsp.myout[0].mid;
+
+$('#mdeductionap').val($totalmdeduct.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+$('#fdeductionap').val(rsp.myout[0].firstdeductiondate);
+
+$("#totalrepayap").val(rsp.myout[0].totalrepayment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+// $('#totalrepayap').val(rsp.myout[0].totalrepayment);
+
+$('#loandateap').val(rsp.myout[0].applicationdate);
+
+$('#pap').val(rsp.myout[0]. totalmonth);
+$('#acctno').val(rsp.myout[0].customerid);
+
+$('#loanapp').css("display",'block');
+
 
 
 
@@ -855,6 +953,62 @@ $('#acctnoloan').val(rsp.myout[0].customerid);
     //err is the response from the server if there is an error
   },
   beforeSend:function(){
+
+
+
+
+  }
+});
+
+};
+
+
+function loanreversal(){
+  formated_data = $('#loanreversalform').serialize();
+ 
+//alert(formated_data);
+$.ajax({
+  
+  type: 'POST',
+      url: "loanreversalf",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
+
+
+
+// console.log(rsp.output[0].nuban);
+
+  $('#notifyinfoinvestment').html('Transaction Reversal &#8358; ' + rsp.output[0].tp+' with Ref_No:'+ rsp.output[0].ref +' Account Number: '+ rsp.output[0].nuban+'  Account Name: ' + rsp.output[0].acctname);
+
+// $('#nubanrevloan').val(rsp.nuban);
+
+// $('#refrevloan').val(rsp.ref);
+
+// $('#acctidloan').val(rsp.acctno);
+
+// $('#creditrevloan').val(rsp.totalprincipal);
+
+// $('#acctnamerevloan').val(rsp.acctname);
+
+// //$('#accttype').val(rsp.loantype);
+
+// $('#totalrepay').val(rsp.totalrepayment);
+
+
+ 
+  //alert(rsp.acctname);
+
+  },
+
+  error:function(err){
+    console.log(err)
+    //err is the response from the server if there is an error
+  },
+  beforeSend:function(){
+
+
+
     
   }
 });
