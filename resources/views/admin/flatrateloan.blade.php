@@ -20,22 +20,52 @@
       
         
                          <div class="row">
-              <div class="col-md-4"></div>
+              <div class="col-md-3"></div>
              
-              <div class="col-md-4">
+              <div class="col-md-6">
+
+                 {{-- begining of success message  --}}
+						@if (session()->has('message'))
+
+						<div class="alert alert-success text-center">
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						{{ session()->get('message') }}
+						</div>
+						@endif
+	   
+						@if (session()->has('message_failed'))
+						<div class="alert alert-danger text-center">
+						   <button type="button" class="close" data-dismiss="alert">x</button>
+					   {{ session()->get('message_failed') }}
+					   </div>
+							
+						@endif
+	   
+						@if (session()->has('message_warning'))
+						<div class="alert alert-warning text-center">
+						   <button type="button" class="close" data-dismiss="alert">x</button>
+					   {{ session()->get('message_warning') }}
+					   </div>
+							
+						@endif
+	   
+                        <x-jet-validation-errors class="mb-4"/>
+	   
+						
+						{{-- End of success message  --}}
           
               </div>
           
-              <div class="col-md-4"></div>
+              <div class="col-md-3"></div>
                
              </div>
                 
         
-                <form id="loanbookingform" method="POST" action="" autocomplete="off">
+                <form id="loanbookingform" method="POST" action="{{ url('loansubmitflat') }}" autocomplete="off">
                     @csrf
                 <div class="row form-group" >
                     <label class="col-md-2 font-weight-bold wht" for="acctnubanloan">Account number</label>
-                    <input type="text" name="acctnubanloan" id="acctnubanloan" class="form-control col-md-4 font-weight-bold" onchange="loandisplay()" onkeyup="loandisplay()">
+                    <input type="text" name="acctnubanloan" id="acctnubanloan" class="form-control col-md-4 font-weight-bold" onchange="loandisplay()" onkeyup="loandisplay()" required>
                     <input type="hidden" name="customerid" id="customerid" >
                 <div class="col-md-2"></div>
                     
@@ -47,7 +77,7 @@
         
                 <div class="row form-group" >
                     <label class="col-md-2 font-weight-bold wht" for="acctnameloan">Customer Name</label>
-                    <input type="text" name="acctnameloan" id="acctnameloan" class="form-control col-md font-weight-bold">
+                    <input type="text" name="acctnameloan" id="acctnameloan" class="form-control col-md font-weight-bold" readonly required>
                     
                 </div>
         
@@ -58,7 +88,7 @@
                             <?php
                                 foreach ($output as $item) {        
                             ?>
-                     <option value=""> <?php echo $item->loantype; ?> </option>
+                     <option value=" <?php echo $item->loantype; ?> "> <?php echo $item->loantype; ?> </option>
                       <?php }; ?>
                         
                     </select>
@@ -70,7 +100,7 @@
         
                 <div class="row form-group" >
                     <label class="col-md-2 font-weight-bold wht" for="loanrequest">Loan Request</label>
-                    <input type="text" name="loanrequest" id="loanrequest" class="form-control col-md-2 font-weight-bold">
+                    <input type="text" name="loanrequest" id="loanrequest" class="form-control col-md-2 font-weight-bold" required>
                     <input type="hidden" name="mPrincipal" id="mPrincipal">
                     
                     <label class="col-md-2 font-weight-bold wht" for="period">Period(Months)</label>
@@ -94,7 +124,7 @@
                     <label class="col-md-2 font-weight-bold wht" for="applydate">Application date</label>
         
                     <!-- <input type="checkbox" class="col-md-1" id="check_id" name="check_id"> -->
-                    <input type="date" name="applydate" id="applydate" class="form-control col-md-3 font-weight-bold" onchange="loandate()">
+                    <input type="date" name="applydate" id="applydate" class="form-control col-md-3 font-weight-bold" onchange="loandisplay()" required>
         
                     
                     
@@ -106,7 +136,7 @@
                     <input type="text" name="totalrepay" id="totalrepay" class="form-control col-md-2 font-weight-bold" readonly="readonly">
         
                     <label class="col-md-2 font-weight-bold wht" for="loanrate">Loan Rate(%)</label>
-                    <input type="text" name="loanrate" id="loanrate" class="form-control col-md-2 font-weight-bold">
+                    <input type="text" name="loanrate" id="loanrate" class="form-control col-md-2 font-weight-bold" required>
                     
                     <label class="col-md-2 font-weight-bold wht" for="totalint">Total Interest</label>
                     <input type="text" name="totalint" id="totalint" class="form-control col-md-2 font-weight-bold" readonly="readonly">
@@ -116,14 +146,14 @@
         
             <div class="row form-group" >
                     <label class="col-md-3 font-weight-bold wht" for="loanpurpose">Loan Purpose(s)</label>
-                    <textarea name="loanpurpose" id="loanpurpose" rows="5" class="form-control col-md-9 font-weight-bold"></textarea>
+                    <textarea name="loanpurpose" id="loanpurpose" rows="5" class="form-control col-md-9 font-weight-bold" required></textarea>
                     
                     
                 </div>
         
          <div class="row form-group" >
                     <label class="col-md-3 font-weight-bold wht" for="loanpurpose">Collateral/Security</label>
-                    <textarea name="loancollateral" id="loancollateral" rows="5" class="form-control col-md-9 font-weight-bold"></textarea>
+                    <textarea name="loancollateral" id="loancollateral" rows="5" class="form-control col-md-9 font-weight-bold" required></textarea>
                     
                     
                 </div>

@@ -197,10 +197,11 @@
            
             <li class="nav-item"> <a class="nav-link" href="#" data-toggle="modal" data-target="#loanmodal1">Add Loan Type</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ url('Flat-Rate-LoanBooking') }}">Flat-Rate-Loan</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('ReducingBalance-LoanBooking') }}">Reducing-balance-Loan</a></li>
           </ul>
         </div>
 
-        
+       
       </li>
 
 

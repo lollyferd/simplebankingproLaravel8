@@ -166,7 +166,9 @@ Route::get('/Special-Deduction',[HomeController::class,'specialdeduction']);
       Route::post('/investmentapproval',[HomeController::class,'investmentapproval']);
 
          // investment matured method ...........
+           //auto run method using crone..............*******
          Route::get('/investmentmatured',[HomeController::class,'investmentmatured']);
+         //.............................end auto run method******
 
             // organization reg ...........
             Route::get('/Organization-Reg',[HomeController::class,'orgreg']);
@@ -185,6 +187,34 @@ Route::get('/Special-Deduction',[HomeController::class,'specialdeduction']);
             Route::get('/Flat-Rate-LoanBooking', [LoanController::class, 'loan']);
 
             Route::POST('/loandisplay', [LoanController::class, 'loandisplay']);
+
+            Route::POST('/loansubmitflat',[LoanController::class, 'loansubmitflat']);
+
+            Route::get('/ReducingBalance-LoanBooking', [LoanController::class, 'reducingloan']);
+
+            Route::POST('/loansubmitreduce',[LoanController::class, 'loansubmitreduce']);
+
+            Route::get('/Loan-Approval', [LoanController::class, 'loanapprovaldisplay']);
+
+            Route::POST('/loanapprovaldisplay',[LoanController::class, 'loanapprovaldisplaydetail']);
+
+            Route::POST('/loanapproval',[LoanController::class, 'loanapproval']);
+
+            //auto run method using crone..............*****
+
+            Route::get('/loandeduction',[LoanController::class, 'loandeduction']);
+
+            Route::get('/loanstatusupdate',[LoanController::class, 'loanstatusupdate']);
+
+            Route::get('/pastdueloan',[LoanController::class, 'pastdueloan']);
+           //.............................end auto run method******
+
+           //.............................loan reversal..............
+           Route::get('/loanreversal',[LoanController::class, 'loanreversal']);
+
+           Route::POST('/loanreversalf',[LoanController::class, 'loanreversalf']);
+
+         
 
       
 

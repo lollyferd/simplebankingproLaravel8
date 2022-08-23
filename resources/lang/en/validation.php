@@ -141,12 +141,24 @@ return [
     |
     */
 
+    // 'custom' => [
+    //     'attribute-name' => [
+    //         'rule-name' => 'custom-message',
+    //     ],
+    // ],
+
+
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'loanrequest' => [
+             'required' => 'Loan request amount is required',
         ],
+
+        'loanrate' => [
+            'required' => 'Loan rate is required',
+       ],
     ],
 
+  
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
