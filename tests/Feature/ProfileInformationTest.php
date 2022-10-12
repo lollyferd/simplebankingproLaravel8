@@ -14,6 +14,7 @@ class ProfileInformationTest extends TestCase
 
     public function test_current_profile_information_is_available()
     {
+        //this is a test
         $this->actingAs($user = User::factory()->create());
 
         $component = Livewire::test(UpdateProfileInformationForm::class);
