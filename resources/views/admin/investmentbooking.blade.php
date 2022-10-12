@@ -14,44 +14,42 @@
             <div class="card-body" style="background-color: #0A043E">
         
                 
+        <h5 class="card-title text-center wht">Investment Booking</h5><br>
+        
         <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4 text-center wht">
-        <h3>Investment Booking</h3>
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                    {{-- begining of success message  --}}
+                    @if (session()->has('message'))
+
+                    <div class="alert alert-success text-center">
+                        <button type="button" class="close" data-dismiss="alert">x</button>
+                    {{ session()->get('message') }}
+                    </div>
+                    @endif
+   
+                    @if (session()->has('message_failed'))
+                    <div class="alert alert-danger text-center">
+                       <button type="button" class="close" data-dismiss="alert">x</button>
+                   {{ session()->get('message_failed') }}
+                   </div>
+                        
+                    @endif
+   
+                    @if (session()->has('message_warning'))
+                    <div class="alert alert-warning text-center">
+                       <button type="button" class="close" data-dismiss="alert">x</button>
+                   {{ session()->get('message_warning') }}
+                   </div>
+                        
+                    @endif
+                    
+                    {{-- End of success message  --}}
+                    <x-jet-validation-errors class="mb-4" />
+            </div>
+            <div class="col-md-3"></div>
+            
         </div>
-        <div class="col-md-4"></div>
-        </div><br>
-
-
-          {{-- begining of success message  --}}
-						@if (session()->has('message'))
-
-						<div class="alert alert-success text-center">
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						{{ session()->get('message') }}
-						</div>
-						@endif
-	   
-						@if (session()->has('message_failed'))
-						<div class="alert alert-danger text-center">
-						   <button type="button" class="close" data-dismiss="alert">x</button>
-					   {{ session()->get('message_failed') }}
-					   </div>
-							
-						@endif
-	   
-						@if (session()->has('message_warning'))
-						<div class="alert alert-warning text-center">
-						   <button type="button" class="close" data-dismiss="alert">x</button>
-					   {{ session()->get('message_warning') }}
-					   </div>
-							
-						@endif
-	   
-                        <x-jet-validation-errors class="mb-4"/>
-	   
-						
-						{{-- End of success message  --}}
 						
         
         

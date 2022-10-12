@@ -19,46 +19,40 @@
         
       
         
-                <div class="row">
-              <div class="col-md-3"></div>
-
-              <div class="col-md-6">
-               {{-- begining of success message  --}}
-						@if (session()->has('message'))
-
-						<div class="alert alert-success text-center">
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						{{ session()->get('message') }}
-						</div>
-						@endif
-	   
-						@if (session()->has('message_failed'))
-						<div class="alert alert-danger text-center">
-						   <button type="button" class="close" data-dismiss="alert">x</button>
-					   {{ session()->get('message_failed') }}
-					   </div>
-							
-						@endif
-	   
-						@if (session()->has('message_warning'))
-						<div class="alert alert-warning text-center">
-						   <button type="button" class="close" data-dismiss="alert">x</button>
-					   {{ session()->get('message_warning') }}
-					   </div>
-							
-						@endif
-	   
-           <x-jet-validation-errors class="mb-4"/>
-
-    
-	   
-						
-						{{-- End of success message  --}}
+              <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                      {{-- begining of success message  --}}
+                    @if (session()->has('message'))
+        
+                    <div class="alert alert-success text-center">
+                      <button type="button" class="close" data-dismiss="alert">x</button>
+                    {{ session()->get('message') }}
+                    </div>
+                    @endif
+             
+                    @if (session()->has('message_failed'))
+                    <div class="alert alert-danger text-center">
+                       <button type="button" class="close" data-dismiss="alert">x</button>
+                     {{ session()->get('message_failed') }}
+                     </div>
+                      
+                    @endif
+             
+                    @if (session()->has('message_warning'))
+                    <div class="alert alert-warning text-center">
+                       <button type="button" class="close" data-dismiss="alert">x</button>
+                     {{ session()->get('message_warning') }}
+                     </div>
+                      
+                    @endif
+                    
+                    {{-- End of success message  --}}
+                    <x-jet-validation-errors class="mb-4" />
+                </div>
+                <div class="col-md-3"></div>
+                
               </div>
-     
-              <div class="col-md-3"></div>
-               
-             </div>
               
         
               <form id="loanbookingformR" method="POST" action="{{ url('loansubmitreduce') }}" autocomplete="off">

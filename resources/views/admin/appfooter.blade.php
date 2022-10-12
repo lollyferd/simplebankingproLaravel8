@@ -976,28 +976,32 @@ $.ajax({
   success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
 
 
+if(rsp.output!=''){
 
-// console.log(rsp.output[0].nuban);
 
   $('#notifyinfoinvestment').html('Transaction Reversal &#8358; ' + rsp.output[0].tp+' with Ref_No:'+ rsp.output[0].ref +' Account Number: '+ rsp.output[0].nuban+'  Account Name: ' + rsp.output[0].acctname);
-
-// $('#nubanrevloan').val(rsp.nuban);
-
-// $('#refrevloan').val(rsp.ref);
-
-// $('#acctidloan').val(rsp.acctno);
-
-// $('#creditrevloan').val(rsp.totalprincipal);
-
-// $('#acctnamerevloan').val(rsp.acctname);
-
-// //$('#accttype').val(rsp.loantype);
-
-// $('#totalrepay').val(rsp.totalrepayment);
+  $('#notifyinfoinvestment').css("color",'black');
+  $('#nubanrevloan').val(rsp.output[0].nuban);
+  $('#refrevloan').val(rsp.output[0].ref);
+  $('#acctidloan').val(rsp.output[0].customerid);
+$('#creditrevloan').val(rsp.output[0].tp);
+$('#acctnamerevloan').val(rsp.output[0].acctname);
+$('#totalrepay').val(rsp.output[0].totalrepayment);
+$('#loanid').val(rsp.output[0].id);
+$('#int').val(rsp.output[0].totalint);
+}else{
 
 
- 
-  //alert(rsp.acctname);
+  $('#notifyinfoinvestment').html("This loan booked can not be reversed");
+  $('#notifyinfoinvestment').css("color",'red');
+
+
+
+
+
+
+}
+
 
   },
 
@@ -1014,6 +1018,332 @@ $.ajax({
 });
 
 };
+
+
+
+
+
+function investmentreversal(){
+  formated_data = $('#investmentreversalform').serialize();
+ 
+//alert(formated_data);
+$.ajax({
+  
+  type: 'POST',
+      url: "investmentreversalf",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ 
+
+//alert('hello');
+if(rsp.output!=''){
+
+
+ $('#notifyinfoinvestment').html('Transaction Reversal &#8358; ' + rsp.output[0].fdamt+' with Ref_No:'+ rsp.output[0].ref +' Account Number: '+ rsp.output[0].nuban+'  Account Name: ' + rsp.output[0].acctname);
+  $('#notifyinfoinvestment').css("color",'black');
+   $('#nubanrev').val(rsp.output[0].nuban);
+  $('#refrev').val(rsp.output[0].ref);
+  $('#acctid').val(rsp.output[0].customerid);
+ $('#creditrev').val(rsp.output[0].fdamt);
+ $('#acctnamerev').val(rsp.output[0].acctname);
+// // $('#totalrepay').val(rsp.output[0].totalrepayment);
+// // $('#loanid').val(rsp.output[0].id);
+// // $('#int').val(rsp.output[0].totalint);
+}else{
+
+
+  $('#notifyinfoinvestment').html("This Investment can not be reversed");
+  $('#notifyinfoinvestment').css("color",'red');
+
+
+
+
+
+
+}
+
+
+  },
+
+  error:function(err){
+    console.log(err)
+    //err is the response from the server if there is an error
+  },
+  beforeSend:function(){
+
+
+
+    
+  }
+});
+
+};
+
+
+function trfreceiver() {
+  formated_data = $('#trf').serialize();
+
+
+//alert(formated_data);
+$.ajax({
+  
+  type: 'POST',
+      url: "transferreceiver",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
+
+
+
+     $('#receivername').val(rsp.output[0].surname+' '+rsp.output[0].othername);
+
+     $('#receiveraccttype').val(rsp.output[0].typeofacct);
+
+    //  $("#receiveracctid").val(rsp.output[0].customerid);
+
+ 
+
+  },
+
+  error:function(err){
+    console.log(err)
+    //err is the response from the server if there is an error
+  },
+  beforeSend:function(){
+   
+
+
+    
+  }
+});
+
+};
+
+function trfsenders() {
+  formated_data = $('#trf').serialize();
+
+$.ajax({
+  
+  type: 'POST',
+      url: "transfersender",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ 
+
+
+
+     $('#sendername').val(rsp.output[0].surname+' '+rsp.output[0].othername);
+
+     $('#senderaccttype').val(rsp.output[0].typeofacct);
+
+    
+
+     $x=$('#senderamount').val();
+
+
+     $y=rsp.output[0].bal-$x;
+
+    
+ $("#senderbal").val($y);
+
+//  $("#senderacctid").val(rsp.output[0].customerid);
+
+
+   
+
+  },
+
+ 
+});
+
+};
+
+
+function transferapprovalcheck(){
+  formated_data = $('#tfdisplay').serialize();
+ 
+//alert(formated_data);
+$.ajax({
+  
+  type: 'POST',
+      url: "transferapprovaldisplay",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
+
+  var date = new Date(rsp.out[0].created_at);
+
+$('#trfdate').text(((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear());
+
+
+$('#trfnuban').val(rsp.out[0].sendernuban);
+$('#trfname').val(rsp.out[0].sendername);
+$('#trftype').val(rsp.out[0].senderaccttype);
+$('#trfamt').val(rsp.out[0].sentamt);
+// $('#trfacctno').val(rsp.out[0].acctno);
+$('#reftrf').val(rsp.out[0].ref);
+
+$('#trfff').css("display",'block');
+
+
+$('#nubantrfr').val(rsp.out[0].receivernuban);
+$('#nametrfr').val(rsp.out[0].receivername);
+$('#typetrfr').val(rsp.out[0].receiveraccttype);
+// $('#acctnotrfr').val(rsp.out[0].acctno);
+
+
+  },
+
+  error:function(err){
+    console.log(err)
+    //err is the response from the server if there is an error
+  },
+  beforeSend:function(){
+
+
+
+
+  }
+});
+
+};
+
+
+function transferreversalview(){
+  formated_data = $('#trfreversal').serialize();
+ 
+//alert(formated_data);
+$.ajax({
+  
+  type: 'POST',
+      url: "transferreversalf",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
+
+ 
+// alert(rsp.output);
+
+console.log(rsp.output[0].sendername);
+
+ $('#notifyinfotransfer').html('Transaction Reversal of &#8358; ' + rsp.output[0].sentamt+' From Account Name: '+ rsp.output[0].sendername +' With Account Number: '+ rsp.output[0].sendernuban);
+ $("#acctidrev").val(rsp.output[0].acctno);
+ $("#nubantrfrev").val(rsp.output[0].nuban);
+ $("#amtrev").val(rsp.output[0].sentamt);
+
+  },
+
+  error:function(err){
+    console.log(err)
+    //err is the response from the server if there is an error
+  },
+  beforeSend:function(){
+
+
+
+
+  }
+});
+
+};
+
+
+function narrations(){
+      
+  $("#narration2").text($('#narration1').val());
+
+}
+
+
+function amount(){
+      
+      $debit=$('#credit').val();
+      
+      
+      
+      $("#debit").val($debit);
+      
+      }
+
+
+      $(document).ready(function(){
+  $('.gltoacct1').click(function(){
+
+$('#exampleFormControlSelect2').css('display','block');
+$('.gltoaccedit1').css('display','block');
+
+
+
+$('.gltoacct2').attr("disabled","disabled");
+
+
+
+    
+  // alert('hello');
+   
+  });
+
+
+   $('.gltoacct2').click(function(){
+
+
+$('#exampleFormControlSelect1').css('display','block');
+ $('.gltoaccedit2').css('display','block');
+
+
+
+ $('.gltoacct1').attr("disabled","disabled");
+    
+  // alert('hello');
+   
+  });
+  });
+
+  $(document).on('keyup change click mouseover', '#nubangltoacct', function(){
+  var output = $(this).val();
+  //console.log(query); 
+
+  $.ajax({
+ 
+ type: 'get',
+     url: "/detailsdisplay",
+     dataType:'json',
+    data: {
+      '_token':'{{ csrf_token() }}',
+      output: output,
+
+    },
+ success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
+//console.log(rsp.myout[0].nuban);
+
+
+$("#displayname1").val(rsp.myout[0].surname+' '+rsp.myout[0].othername);
+var num = rsp.myout[0].bal;
+
+$("#displaybal1").val(num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+
+// $("#customerid").val(rsp.myout[0].customerid)
+// $("#status").text(rsp.myout[0].status)
+// $("#tel").text(rsp.myout[0].tel)
+// $("#accttype").val(rsp.myout[0].typeofacct)
+
+ },
+
+ error:function(err){
+  console.log(err);
+   //err is the response from the server if there is an error
+ },
+ beforeSend:function(){
+   
+ }
+});
+
+
+});
+
+
+
+
 
   </script>
   

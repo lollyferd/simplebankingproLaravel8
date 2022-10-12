@@ -36,7 +36,7 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item inerlinkdropdown linkmenu" href="{{ url('FD-Approval') }}">Investment Approval</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item inerlinkdropdown linkmenu" href="#">Transfer Approval</a>
+            <a class="dropdown-item inerlinkdropdown linkmenu" href="{{ url('Intra-Transfer-Approval') }}">Transfer Approval</a>
           </div>
         </li>
          </ul>
@@ -53,9 +53,9 @@
             
              <a class="dropdown-item inerlinkdropdown linkmenu" href="{{ url('loanreversal') }}">Loan Reversal</a>
              <div class="dropdown-divider"></div>
-             <a class="dropdown-item inerlinkdropdown linkmenu" href="#">Investment Reversal</a>
+             <a class="dropdown-item inerlinkdropdown linkmenu" href="{{ url('investmentreversaldetails') }}">Investment Reversal</a>
              <div class="dropdown-divider"></div>
-             <a class="dropdown-item inerlinkdropdown linkmenu" href="#">Transfer Reversal</a>
+             <a class="dropdown-item inerlinkdropdown linkmenu" href="{{ url('Transfer-Reversal') }}">Transfer Reversal</a>
            </div>
          </li>
           </ul>

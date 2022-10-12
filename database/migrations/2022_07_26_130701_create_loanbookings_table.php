@@ -21,11 +21,11 @@ class CreateLoanbookingsTable extends Migration
             $table->string('acctname');
             $table->string('loantype')->nullable();
             $table->string('method')->nullable();
-            $table->float('mpd')->default(0);
-            $table->float('mid')->default(0);
-            $table->float('tp')->default(0);
-            $table->float('pp')->default(0);
-            $table->float('pr')->default(0);
+            $table->double('mpd',12,2)->default(0);
+            $table->double('mid',12,2)->default(0);
+            $table->double('tp',12,2)->default(0);
+            $table->double('pp',12,2)->default(0);
+            $table->double('pr',12,2)->default(0);
             $table->string('totalmonth')->nullable();
             $table->string('deductedmonth')->nullable();
             $table->string('remainingmonth')->nullable();
@@ -38,7 +38,7 @@ class CreateLoanbookingsTable extends Migration
             $table->date('deductionmain');
             $table->date('loanexpdate');
             $table->string('loanrate');
-            $table->float('totalrepayment')->default(0);
+            $table->double('totalrepayment',12,2)->default(0);
             $table->string('loanpurpose');
             $table->string('collateral');
             $table->string('status');

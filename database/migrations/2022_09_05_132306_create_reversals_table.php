@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLedgersTable extends Migration
+class CreateReversalsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreateLedgersTable extends Migration
      */
     public function up()
     {
-        Schema::create('ledgers', function (Blueprint $table) {
+        Schema::create('reversals', function (Blueprint $table) {
             $table->id();
-            $table->string('refno')->nullable();
-            $table->string('customerid');
-            $table->string('nuban');
-            $table->string('narration')->nullable();
+            $table->string('ref')->nullable();
+            $table->string('customerid')->nullable();
+            $table->string('nuban')->nullable();
+            $table->string('acctname')->nullable();
             $table->double('credit',12,2)->default(0);
             $table->double('debit',12,2)->default(0);
-            $table->string('deleted')->default('N');
+            $table->string('accttype')->nullable();
             $table->string('status')->nullable();
-            $table->string('user')->nullable();
-            $table->string('loanref')->nullable();
             $table->timestamps();
         });
     }
@@ -36,6 +34,6 @@ class CreateLedgersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ledgers');
+        Schema::dropIfExists('reversals');
     }
 }

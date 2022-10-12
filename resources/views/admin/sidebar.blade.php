@@ -117,8 +117,6 @@
         <div class="collapse" id="auth2">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ url('createuser') }}">Add User </a></li>
-            <li class="nav-item"> <a class="nav-link" href="#"> 500 </a></li>
-            <li class="nav-item"> <a class="nav-link" href="#"> Login </a></li>
             <li class="nav-item"> <a class="nav-link" href="#"> Register </a></li>
           </ul>
         </div>
@@ -155,6 +153,8 @@
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ url('sub-class') }}">Create GL Sub-Class</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ url('create-GL') }}">Create GL</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('GL-to-GL') }}">GL to GL Transaction</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('GL-to-Account') }}">GL to Account Transaction</a></li>
           </ul>
         </div>
 
@@ -206,6 +206,30 @@
 
 
       {{-- end loan management --}}
+
+       {{-- TRansfer management --}}
+
+
+
+       <li class="nav-item menu-items">
+        <a class="nav-link" data-toggle="collapse" href="#authintratransfer" aria-expanded="false" aria-controls="authintratransfer">
+          <span class="menu-icon">
+            <i class="mdi mdi-security"></i>
+          </span>
+          <span class="menu-title">Intra Bank Transfer</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="authintratransfer">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{ url('Intra-Transfer') }}">Transfer</a></li>
+          </ul>
+        </div>
+
+       
+      </li>
+
+
+      {{-- end transfer management --}}
 
 
       <li class="nav-item menu-items">

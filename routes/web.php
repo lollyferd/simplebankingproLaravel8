@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\TransferController;
+use App\Http\Controllers\GlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,15 +69,27 @@ Route::POST('/deposit',[HomeController::class,'depositfunction']);
 
 Route::POST('/wdr',[HomeController::class,'wdrf']);
 
-Route::get('/sub-class',[HomeController::class,'view_sub_class']);
+//** GL management */
+Route::get('/sub-class',[GlController::class,'view_sub_class']);
 
-Route::POST('/subclass',[HomeController::class,'subclass']);
+Route::POST('/subclass',[GlController::class,'subclass']);
 
-Route::get('/displaysub',[HomeController::class,'displaysubfunction']);
+Route::get('/displaysub',[GlController::class,'displaysubfunction']);
 
-Route::get('/create-GL',[HomeController::class,'createglfunction']);
+Route::get('/create-GL',[GlController::class,'createglfunction']);
 
-Route::POST('/glcreate',[HomeController::class,'glcreatefunction']);
+Route::POST('/glcreate',[GlController::class,'glcreatefunction']);
+
+Route::get('/GL-to-GL',[GlController::class,'gltogl']);
+
+Route::POST('/glposting',[GlController::class,'glposting']);
+
+Route::get('/GL-to-Account',[GlController::class,'gltoacc']);
+Route::POST('/gltoacctposting',[GlController::class,'gltoacctposting']);
+
+//** GL management end */
+
+
 
 //code testing view...........
 // Route::get('/check',[HomeController::class,'testdb']);
@@ -165,6 +179,16 @@ Route::get('/Special-Deduction',[HomeController::class,'specialdeduction']);
       // approval investment method ...........
       Route::post('/investmentapproval',[HomeController::class,'investmentapproval']);
 
+      //investment reversal.............****
+      Route::get('/investmentreversaldetails',[HomeController::class,'investmentreversaldetails']);
+
+      Route::POST('/investmentreversalf',[HomeController::class,'investmentreversalf']);
+
+      Route::POST('/investmentReverse',[HomeController::class,'investmentReverse']);
+
+
+      //................****
+
          // investment matured method ...........
            //auto run method using crone..............*******
          Route::get('/investmentmatured',[HomeController::class,'investmentmatured']);
@@ -209,13 +233,45 @@ Route::get('/Special-Deduction',[HomeController::class,'specialdeduction']);
             Route::get('/pastdueloan',[LoanController::class, 'pastdueloan']);
            //.............................end auto run method******
 
-           //.............................loan reversal..............
+           //.............................loan reversal management..............
+           //loan reversal page display
            Route::get('/loanreversal',[LoanController::class, 'loanreversal']);
 
+            //loan reversal details display
            Route::POST('/loanreversalf',[LoanController::class, 'loanreversalf']);
+          //loan reversal function
+           Route::POST('/loanreversalfunction',[LoanController::class, 'loanreversalfunction']);
 
          
+//**** */Transfer Modul
 
+Route::get('/Intra-Transfer',[TransferController::class, 'transfer']);
+
+Route::Post('/transferreceiver',[TransferController::class, 'transferreceiver']);
+Route::Post('/transfersender',[TransferController::class, 'transfersender']);
+
+Route::Post('/transferfunction',[TransferController::class, 'transferfunction']);
+
+
+Route::get('/Intra-Transfer-Approval',[TransferController::class, 'transferapproval']);
+
+Route::Post('/transferapprovaldisplay',[TransferController::class, 'transferapprovaldisplay']);
+
+Route::Post('/trfapproval',[TransferController::class, 'trfapproval']);
+
+//**transfer reversal */
+
+Route::get('/Transfer-Reversal',[TransferController::class, 'transferreversal']);
+
+Route::POST('/transferreversalf',[TransferController::class, 'transferreversalf']);
+
+Route::POST('/trfreversalfunction',[TransferController::class, 'trfreversalfunction']);
+
+
+//**end transfer reversal */
+
+
+//*** */
       
 
 

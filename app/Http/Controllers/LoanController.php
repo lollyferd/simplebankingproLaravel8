@@ -1191,11 +1191,142 @@ public function loanreversalf(Request $request){
            ->whereNull('deductedmonth')
             ->where('status', '=', 'Approved')
             ->get();
+            
 
             return response()->json([
                 "output" => $result,
             ]);
 
 }
+
+public function loanreversalfunction(Request $request){
+    $result = DB::table('loanbookings')
+            ->where('ref', '=', $request->refrevloan)
+            ->where('status', '=', 'Approved')
+            ->count();
+    if($result > 0){
+        $statusL='LBR_Reversed';
+
+            DB::table('loanbookings')
+            ->where('ref', '=', $request->refrevloan)
+          ->update([
+            'status' => $statusL
+          ]);
+
+          $narration2="Loan Booking Reversed ".$request->refrevloan;
+
+          DB::table('ledgers')
+            ->insert([
+                'customerid' => $request->acctidloan,
+                'Refno' => $request->refrevloan,
+                'nuban' => $request->nubanrevloan,
+                'narration' => $narration2,
+                'debit' => $request->creditrevloan,
+                'user' => Auth::user()->name,
+                'status' =>  $statusL,
+                'created_at' => Carbon::now(),
+                'updated_at' => now()
+
+            ]);
+        // DB::table('ledgers')
+        //     ->where('Refno','=', $request->refrevloan)
+        //     ->update([
+        //       'status' => $statusL  
+        //     ]);
+
+//dont forget to reverse transactions in gl*****
+$narrationgl ='Loan reversal';
+
+$glcode2 = DB::table('gl_creates')
+->where('glname', '=', 'Interest-In-Suspense')
+->get();
+
+DB::table('gl_ledgers')->insert([
+    'class_id' => $glcode2[0]->classid,
+    'sub_class_id' => $glcode2[0]->subclassid,
+    'gl_code' => $glcode2[0]->gl_code,
+    'gl_name' => $glcode2[0]->glname,
+    'narration' => $narrationgl,
+    'debit' => $request->int,
+    'status' => $statusL,
+    'user' => Auth::user()->name,
+    'refno' =>  $request->refrevloan,
+   
+]);
+
+$glcode = DB::table('gl_creates')
+->where('glname', '=', 'Customer-Loan')
+->get();
+
+DB::table('gl_ledgers')->insert([
+    'class_id' => $glcode[0]->classid,
+    'sub_class_id' => $glcode[0]->subclassid,
+    'gl_code' => $glcode[0]->gl_code,
+    'gl_name' => $glcode[0]->glname,
+    'narration' => $narrationgl,
+    'credit' => $request->creditrevloan,
+    'status' => $statusL,
+    'user' => Auth::user()->name,
+    'refno' =>  $request->refrevloan,
+   
+]);
+
+
+
+
+//**** */
+
+            DB::table('loanrepayments')
+            ->where('loanid','=', $request->loanid)
+            ->update([
+              'rdstatus' => $statusL  
+            ]);
+        
+        DB::table('reversals')->insert([
+                'ref' => $request->refrevloan,
+                'customerid' => $request->acctidloan, 
+                'nuban' => $request->nubanrevloan,
+                'credit' => $request->creditrevloan,
+                'accttype' => $request->accttype,
+                'status' => $statusL 
+        ]);
+
+        $out = DB::table('customer_details')
+                ->where('nuban', '=', $request->nubanrevloan)
+                ->get();
+
+                $loanbal = $out[0]->loanbal - $request->totalrepay;
+
+                $balcredit = DB::table('ledgers')
+                ->where('nuban', '=', $request->nubanrevloan)
+                ->where('deleted', '=', 'N')
+                ->sum('credit');
+
+                $baldebit = DB::table('ledgers')
+                ->where('nuban', '=', $request->nubanrevloan)
+                ->where('deleted', '=', 'N')
+                ->sum('debit');
+
+                $bal =  $balcredit - $baldebit;
+
+             $finalresposense =   DB::table('customer_details')
+                    ->where('nuban','=',$request->nubanrevloan)
+                    ->update([
+                        'bal' => $bal,
+                        'loanbal' => $loanbal
+                    ]);
+            if($finalresposense==true){
+            return redirect()->back()->with('message', 'Loan reversal successful'); 
+            } else{
+            return redirect()->back()->with('message_warning', 'Loan reversal Failed'); 
+        }
+    } else{
+        return redirect()->back()->with('message_failed', 'Invalid Reference ID'); 
+    }       
+}
+
+
+
+
 
 }

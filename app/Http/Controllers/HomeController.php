@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\state;
 use App\Models\ledger;
-use App\Models\gl_create;
+
 use App\Models\investment;
 use App\Models\account_type;
 use Illuminate\Http\Request;
-use App\Models\account_class;
+
 use Illuminate\Support\Carbon;
 use App\Models\account_officer;
 use App\Models\customer_detail;
 //use Illuminate\Contracts\Session\Session;
-use App\Models\account_subclass;
-use App\Models\loantype;
+
+//use App\Models\loantype;
 use App\Models\organization;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -632,96 +632,6 @@ $checking = customer_detail::where('nuban', '=', $request->input('nuban11'))->co
   
 
 
-public function view_sub_class(){
-    $output = account_class::all();
-    return view('admin.create_sub_class', compact('output'));
-}
-
-//inpute sub class.................
-
-public function subclass(Request $req){
-
-
-    $req->validate([
-        'subclass' => ['required', 'string', 'max:255','unique:account_subclasses'],
-        'classid' => ['string', 'max:255'],
-        
-        
-    ]);
-
-    account_subclass::create([
-        'subclass' => $req->subclass,
-        'classid' => $req->classid,
-       
-    ]);
-
-    
-    
-        return redirect()->back()->with('message', 'GL Sub Account created Successful'); 
-
-}
-
-//to display list of sub class......................
-public function displaysubfunction(Request $req){
-        $customersfetch1 = account_subclass::where('classid', '=', $req->get('out'))->get();
-         
-        return response()->json([
-            'myout' =>  $customersfetch1,
-        ]);
-        
-     }
-
-     public function createglfunction(){
-        $output = account_class::all();
-        return view('admin.create_gl', compact('output'));
-        
-     }
-
-     public function glcreatefunction(Request $req){
-        $req->validate([
-         'glname' => ['required', 'string', 'max:255','unique:gl_creates'],
-         'subclassid' => ['required'],
-         'classid' => ['required'],
-        ]);
-
-         $item = new gl_create();
-        
-         $item->classid = $req->input('classid');
-         $item->subclassid = $req->input('subclassid');
-         $item->glname = $req->input('glname');
-         $item->save();
-         $newid=$item->id;
-
-         $item2 = gl_create::find($item->id);
-      /// $glcode= $item2->class_id.$item2->subclass_id.$newid;
-         
-       if (strlen($newid)==1) {
-        $formattedglcode=$item2->classid.$item2->subclassid.'000'.$newid;
-       
-    }
-
-    if (strlen($newid)==2) {
-        $formattedglcode=$item2->classid.$item2->subclassid.'00'.$newid;
-       
-    }
-
-    if (strlen($newid)==3) {
-        $formattedglcode=$item2->classid.$item2->subclassid.'0'.$newid;
-       
-    }
-
-    if (strlen($newid)==4) {
-        $formattedglcode=$item2->classid.$item2->subclassid.$newid;
-       
-    }
-         $item2->gl_code = $formattedglcode;
-         $item2->save();
-
-         return redirect()->back()->with('message', 'GL  Account created Successful'); 
-   
-     }
-
-
 
 
 
@@ -786,8 +696,9 @@ public function customerLFS(Request $req){
     $ledger2 = DB::table('ledgers')
     ->where('nuban', '=',$nuban)
     ->where('deleted', '=','N')
-    ->where('status', '=','cash_tr')
-    ->orwhere('status', '=','Special-D')
+    // ->where('status', '=','cash_tr')
+    // ->orwhere('status', '=','Special-D')
+    // ->orwhere('status', '=','Reversed')
     ->get();
      $ledger2 = json_encode($ledger2);
 
@@ -1721,7 +1632,121 @@ public function certificate(Request $request){
     return view('/admin.certificate', compact('out', 'company', 'details'));
 }
 
+//loan reversal function .....***
 
+
+public function investmentreversaldetails(){
+    return view('admin.investment_reversal');
+}
+
+public function investmentreversalf(Request $request){
+
+    $result = DB::table("investments")
+            ->where('ref', '=', $request->ref)
+            ->where('status', '=', 'Approved')
+            ->get();
+            
+
+            return response()->json([
+                "output" => $result,
+            ]);
+
+}
+
+public function investmentReverse(Request $request){
+    $result = DB::table('investments')
+    ->where('ref', '=', $request->refrev)
+    ->where('status', '=', 'Approved')
+    ->count();
+if($result > 0){
+
+    $statusL='FDB_Reversed';
+
+    DB::table('investments')
+    ->where('ref', '=', $request->refrev)
+  ->update([
+    'status' => $statusL
+  ]);
+
+  $narration2='FD Transaction reversed('.$request->nubanrev.')';
+
+  DB::table('ledgers')
+  ->insert([
+      'customerid' => $request->acctid,
+      'Refno' => $request->refrev,
+      'nuban' => $request->nubanrev,
+      'narration' => $narration2,
+      'credit' => $request->creditrev,
+      'user' => Auth::user()->name,
+      'status' =>  $statusL,
+      'created_at' => Carbon::now(),
+      'updated_at' => now()
+
+  ]);
+
+  $narrationfd='FDB/'.$request->nubanrev;
+
+  $glcode2 = DB::table('gl_creates')
+->where('glname', '=', 'Longterm-Deposit')
+->get();
+
+DB::table('gl_ledgers')->insert([
+    'class_id' => $glcode2[0]->classid,
+    'sub_class_id' => $glcode2[0]->subclassid,
+    'gl_code' => $glcode2[0]->gl_code,
+    'gl_name' => $glcode2[0]->glname,
+    'narration' => $narrationfd,
+    'debit' => $request->creditrev,
+    'status' => $statusL,
+    'user' => Auth::user()->name,
+    'refno' =>  $request->refrev,
+   
+]);
+
+DB::table('reversals')->insert([
+    'ref' => $request->refrev,
+    'customerid' => $request->acctid, 
+    'nuban' => $request->nubanrev,
+    'credit' => $request->creditrev,
+    'accttype' => $request->accttype,
+    'status' => $statusL 
+]);
+
+// $out = DB::table('customer_details')
+//                 ->where('nuban', '=', $request->nubanrev)
+//                 ->get();
+
+//                 $bal = $out[0]->bal - $request->creditrev;
+
+                $balcredit = DB::table('ledgers')
+                ->where('nuban', '=', $request->nubanre)
+                ->where('deleted', '=', 'N')
+                ->sum('credit');
+
+                $baldebit = DB::table('ledgers')
+                ->where('nuban', '=', $request->nubanre)
+                ->where('deleted', '=', 'N')
+                ->sum('debit');
+
+                $bal =  $balcredit - $baldebit;
+
+             $finalresposense =   DB::table('customer_details')
+                    ->where('nuban','=',$request->nubanrev)
+                    ->update([
+                        'bal' => $bal,
+                    ]);
+
+                    if($finalresposense==true){
+                        return redirect()->back()->with('message', 'Investment reversal successful'); 
+                        } else{
+                        return redirect()->back()->with('message_warning', 'Investment reversal Failed'); 
+                    }
+
+
+}else{
+    return redirect()->back()->with('message_failed', 'Invalid Reference ID'); 
+}
+}
 
         
 //testing code for checkview.................

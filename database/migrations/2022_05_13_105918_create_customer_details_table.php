@@ -37,9 +37,9 @@ class CreateCustomerDetailsTable extends Migration
             $table->string('photo')->nullable();
             $table->string('sign')->nullable();
             $table->string('accountofficer');
-            $table->string('bal')->default(0);
-            $table->string('loanbal')->default(0);
-            $table->string('intbal')->default(0);
+            $table->double('bal',12,2)->default(0);
+            $table->double('loanbal',12,2)->default(0);
+            $table->double('intbal',12,2)->default(0);
             $table->string('createdby')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
