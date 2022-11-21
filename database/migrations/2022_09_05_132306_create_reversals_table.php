@@ -16,7 +16,10 @@ class CreateReversalsTable extends Migration
         Schema::create('reversals', function (Blueprint $table) {
             $table->id();
             $table->string('ref')->nullable();
-            $table->string('customerid')->nullable();
+            $table->bigInteger('customerid',false,true)->unsigned()->index();
+
+            $table->foreign('customerid')->references('id')->on('customer_details')
+            ->onDelete('cascade');
             $table->string('nuban')->nullable();
             $table->string('acctname')->nullable();
             $table->double('credit',12,2)->default(0);

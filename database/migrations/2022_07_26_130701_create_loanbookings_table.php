@@ -15,7 +15,10 @@ class CreateLoanbookingsTable extends Migration
     {
         Schema::create('loanbookings', function (Blueprint $table) {
             $table->id();
-            $table->string('customerid');
+            $table->bigInteger('customerid',false,true)->unsigned()->index();
+
+            $table->foreign('customerid')->references('id')->on('customer_details')
+            ->onDelete('cascade');
             $table->string('ref')->nullable();
             $table->string('nuban');
             $table->string('acctname');

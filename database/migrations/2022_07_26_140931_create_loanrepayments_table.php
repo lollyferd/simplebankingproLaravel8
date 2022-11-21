@@ -17,7 +17,10 @@ class CreateLoanrepaymentsTable extends Migration
             $table->id();
             $table->string('loanid')->nullable();
             $table->string('ref')->nullable();
-            $table->string('customerid');
+            $table->bigInteger('customerid',false,true)->unsigned()->index();
+
+            $table->foreign('customerid')->references('id')->on('customer_details')
+            ->onDelete('cascade');
             $table->string('nuban');
             $table->date('repaydate');
             $table->double('deductionbal',12,2)->default(0);

@@ -83,6 +83,8 @@
         </a>
       </li> --}}
 
+        {{-- posting management --}}
+
       <li class="nav-item menu-items">
         <a class="nav-link" data-toggle="collapse" href="#authposting" aria-expanded="false" aria-controls="authposting">
           <span class="menu-icon">
@@ -104,8 +106,9 @@
           </ul>
         </div>
       </li>
+        {{-- end of posting management --}}
     
-
+  {{-- user management --}}
       <li class="nav-item menu-items">
         <a class="nav-link" data-toggle="collapse" href="#auth2" aria-expanded="false" aria-controls="auth2">
           <span class="menu-icon">
@@ -117,10 +120,34 @@
         <div class="collapse" id="auth2">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ url('createuser') }}">Add User </a></li>
-            <li class="nav-item"> <a class="nav-link" href="#"> Register </a></li>
+
+            <li class="nav-item"> <a class="nav-link" href="{{ url('accesstype') }}">Add Access Type to User </a></li>
           </ul>
         </div>
       </li>
+        {{--end of user management --}}
+
+        {{-- Teller management --}}
+      <li class="nav-item menu-items">
+        <a class="nav-link" data-toggle="collapse" href="#auth2-1" aria-expanded="false" aria-controls="auth2-1">
+          <span class="menu-icon">
+            <i class="mdi mdi-security"></i>
+          </span>
+          <span class="menu-title">Teller Management</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="auth2-1">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{{ url('addteller') }}">Add Tellers Till</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('TellerTransaction') }}">Teller Transaction </a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('TillBalance') }}">Tellers Till Bal </a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('dailytill') }}">Daily Till Transaction </a></li>
+          </ul>
+        </div>
+      </li>
+        {{--end of Teller management --}}
+
+        {{-- account management --}}
 
       <li class="nav-item menu-items">
         <a class="nav-link" data-toggle="collapse" href="#auth3" aria-expanded="false" aria-controls="auth3">
@@ -140,7 +167,9 @@
           </ul>
         </div>
       </li>
+  {{--end Account  management --}}
 
+  {{-- GL management --}}
       <li class="nav-item menu-items">
         <a class="nav-link" data-toggle="collapse" href="#auth4" aria-expanded="false" aria-controls="auth4">
           <span class="menu-icon">
@@ -160,7 +189,9 @@
 
         
       </li>
+        {{-- end of GL management --}}
 
+  {{-- investment management --}}
 
       <li class="nav-item menu-items">
         <a class="nav-link" data-toggle="collapse" href="#auth5" aria-expanded="false" aria-controls="auth5">
@@ -179,6 +210,8 @@
 
         
       </li>
+        {{-- end of  investment management --}}
+
 
       {{-- loan management --}}
 
@@ -243,7 +276,9 @@
         <div class="collapse" id="auth6">
           <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ url('Organization-Reg') }}">Register Org</a></li>
-            {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('create-GL') }}">Create GL</a></li> --}}
+            <li class="nav-item"> <a class="nav-link" href="{{ url('deactivate_Users') }}">Deactivate All Users</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('activate_users') }}">activate All Users</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url('createaccesstype') }}">Access Type SetUp </a></li>
           </ul>
         </div>
 

@@ -16,7 +16,11 @@ class CreateLedgersTable extends Migration
         Schema::create('ledgers', function (Blueprint $table) {
             $table->id();
             $table->string('refno')->nullable();
-            $table->string('customerid');
+            $table->bigInteger('customerid',false,true)->unsigned()->index();
+
+            $table->foreign('customerid')->references('id')->on('customer_details')
+            ->onDelete('cascade');
+
             $table->string('nuban');
             $table->string('narration')->nullable();
             $table->double('credit',12,2)->default(0);

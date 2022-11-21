@@ -72,7 +72,7 @@
         .tabstyle{
           color: black !important; 
           background-color:white !important; 
-        }
+        } 
         
         </style>
   </head>
@@ -91,6 +91,13 @@
                     {{ session('status') }}
                 </div>
             @endif
+            @if (session('message'))
+            <div class="alert alert-danger text-center">
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						{{ session()->get('message') }}
+						</div>
+            </div>
+        @endif
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                   <div class="form-group">

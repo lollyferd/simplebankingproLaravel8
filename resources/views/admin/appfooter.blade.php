@@ -1342,6 +1342,36 @@ $("#displaybal1").val(num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
 });
 
 
+function tillcheck(){
+  formated_data = $('#tillcheckid').serialize();
+ 
+//alert(formated_data);
+$.ajax({
+  
+  type: 'POST',
+      url: "tillbalcheck",
+      dataType:'json',
+      data: formated_data,
+  success:function(rsp){ //response will come in this format {'msg':'',msgclass:'',}
+
+ 
+
+
+// console.log(rsp.myout);
+
+
+  $("#displaycheckbal").text(rsp.myout);
+
+  },
+
+  error:function(err){
+    console.log(err)
+    //err is the response from the server if there is an error
+  },
+ 
+});
+
+};
 
 
 

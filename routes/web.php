@@ -1,10 +1,13 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GlController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TellerController;
 use App\Http\Controllers\TransferController;
-use App\Http\Controllers\GlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,7 +101,7 @@ Route::POST('/gltoacctposting',[GlController::class,'gltoacctposting']);
 //code testing view ................
 
 //till balance display...............
-    Route::get('/navbar',[HomeController::class,'tillbal']);
+    // Route::get('/navbar',[HomeController::class,'tillbal']);
 
 //customer ledger display..................
 Route::get('/customer-ledger',[HomeController::class,'customerledger']);
@@ -195,9 +198,9 @@ Route::get('/Special-Deduction',[HomeController::class,'specialdeduction']);
          //.............................end auto run method******
 
             // organization reg ...........
-            Route::get('/Organization-Reg',[HomeController::class,'orgreg']);
+            Route::get('/Organization-Reg',[AdminController::class,'orgreg']);
 
-            Route::POST('/orgsubmit',[HomeController::class,'orgsubmit']);
+            Route::POST('/orgsubmit',[AdminController::class,'orgsubmit']);
 
             //cert generate system
             Route::get('/cert_generate',[HomeController::class,'certgenerate']);
@@ -272,13 +275,68 @@ Route::POST('/trfreversalfunction',[TransferController::class, 'trfreversalfunct
 
 
 //*** */
+
+
+//******* * user activation by admin/
+
+Route::get('/deactivate_Users',[AdminController::class, 'deactivate_org']);
+
+Route::POST('/deactivate_users2',[AdminController::class, 'deactivate_org2']);
+
+Route::get('/activate_users',[AdminController::class, 'activate_users']);
+
+Route::POST('/activate_users2',[AdminController::class, 'activate_org2']);
+
+
+//******* end of user activation by admin*/
+
+
+//***** teller management/
+//till balance display...............
+Route::get('/navbar',[TellerController::class,'tillbalmain']);
       
+Route::get('/addteller',[TellerController::class, 'addteller']);
+Route::post('/addtellerf',[TellerController::class, 'addtellerf']);
+
+Route::get('/TillBalance',[TellerController::class, 'tillbal']);
+Route::POST('/tillbalcheck',[TellerController::class, 'tillbalcheck']);
+
+Route::get('/TellerTransaction',[TellerController::class, 'tellertransaction']);
+Route::post('/TellerTransaction',[TellerController::class, 'tellertransactioncheck']);
+
+Route::get('/dailytill',[TellerController::class, 'dailytill']);
+
+//tellertransactioncheck
+
 
 
 
           
 
-     
+//*****end of teller management/   
+
+
+
+//***** user management/
+      
+Route::get('/accesstype',[HomeController::class, 'accesstype']);
+Route::post('/addaccesstouser',[HomeController::class, 'addaccesstouser']);
+
+Route::get('/createaccesstype',[HomeController::class, 'createaccesstype']);
+
+Route::post('/insertaccess',[HomeController::class, 'insertaccess']);
+
+
+          
+
+//*****end of user management/   
+
+//** birthday  */
+
+Route::get('/birthday',[HomeController::class, 'birthday']);
+
+//**end birthday  */
+
 
      
 

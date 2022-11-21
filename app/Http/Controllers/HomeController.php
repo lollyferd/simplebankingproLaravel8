@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\account_officer;
 use App\Models\customer_detail;
+use App\Models\accesstype;
 //use Illuminate\Contracts\Session\Session;
 
 //use App\Models\loantype;
@@ -47,7 +48,7 @@ class HomeController extends Controller
                 return view('auth.login');
             }
         }else{
-            return view('auth.login');
+             return redirect()->back()->with('message', 'access denied'); 
         }
     }
   
@@ -212,34 +213,34 @@ public function uploadcustomer(Request $request){
     
 			if (strlen($newcustomer->id)==1) {
 				$nubanformatted='102'.$acctid[0]->id.'00000'.$newcustomer->id;
-                $customernuban='00000'.$newcustomer->id;
+                // $customernuban='00000'.$newcustomer->id;
 			}
 			if (strlen($newcustomer->id)==2) {
 				$nubanformatted='102'.$acctid[0]->id.'0000'.$newcustomer->id;
-                $customernuban='0000'.$newcustomer->id;
+                // $customernuban='0000'.$newcustomer->id;
 			}
 			if (strlen($newcustomer->id)==3) {
 				$nubanformatted='102'.$acctid[0]->id.'000'.$newcustomer->id;
-                $customernuban='000'.$newcustomer->id;
+                // $customernuban='000'.$newcustomer->id;
 			}
 
 			if (strlen($newcustomer->id)==4) {
 				$nubanformatted='102'.$acctid[0]->id.'00'.$newcustomer->id;
-                $customernuban='00'.$newcustomer->id;
+                // $customernuban='00'.$newcustomer->id;
 			}
 
 			if (strlen($newcustomer->id)==5) {
 				$nubanformatted='102'.$acctid[0]->id.'0'.$newcustomer->id;
-                $customernuban='0'.$newcustomer->id;
+                // $customernuban='0'.$newcustomer->id;
 			}
 			if (strlen($newcustomer->id)==6) {
 				$nubanformatted='102'.$acctid[0]->id.$newcustomer->id;
-                $customernuban=$newcustomer->id;
+                // $customernuban=$newcustomer->id;
 			}
     
             $updatenuban= customer_detail::find($newcustomer->id);
             
-            $updatenuban->customerid = $customernuban;
+            $updatenuban->customerid = $newcustomer->id;
             $updatenuban->nuban = $nubanformatted;
 
             $updatenuban->save();
@@ -422,7 +423,7 @@ $checking = customer_detail::where('nuban', '=', $request->input('nuban11'))->co
     $deposit->customerid = $request->input('customerid');
     $deposit->nuban = $request->input('nuban11');
     $deposit->narration = $request->input('narration');
-    $deposit->customerid = $request->input('customerid');
+    // $deposit->customerid = $request->input('customerid');
     $deposit->credit = $request->input('credit');
     $deposit->user = Auth::user()->name;
     $deposit->save();
@@ -469,6 +470,8 @@ $checking = customer_detail::where('nuban', '=', $request->input('nuban11'))->co
             'status' => 'cash_tr',
             'user' => Auth::user()->name,
             'refno' =>  $deposit2->refno,
+            'created_at' => Carbon::now(),
+            'updated_at' => now()
            
         ]);
 
@@ -486,6 +489,8 @@ $checking = customer_detail::where('nuban', '=', $request->input('nuban11'))->co
             'status' => 'cash_tr',
             'user' => Auth::user()->name,
             'refno' =>  $deposit2->refno,
+            'created_at' => Carbon::now(),
+            'updated_at' => now()
            
         ]);
 
@@ -543,7 +548,7 @@ $checking = customer_detail::where('nuban', '=', $request->input('nuban11'))->co
     $wdr->customerid = $request->input('customerid');
     $wdr->nuban = $request->input('nuban11');
     $wdr->narration = $request->input('narration');
-    $wdr->customerid = $request->input('customerid');
+    // $wdr->customerid = $request->input('customerid');
     $wdr->debit = $request->input('debit');
     $wdr->user = Auth::user()->name;
     $wdr->save();
@@ -590,6 +595,8 @@ $checking = customer_detail::where('nuban', '=', $request->input('nuban11'))->co
             'status' => 'cash_tr',
             'user' => Auth::user()->name,
             'refno' =>  $wdr2->refno,
+            'created_at' => Carbon::now(),
+            'updated_at' => now()
            
         ]);
 
@@ -607,6 +614,8 @@ $checking = customer_detail::where('nuban', '=', $request->input('nuban11'))->co
             'status' => 'cash_tr',
             'user' => Auth::user()->name,
             'refno' =>  $wdr2->refno,
+            'created_at' => Carbon::now(),
+            'updated_at' => now()
            
         ]);
 
@@ -635,28 +644,6 @@ $checking = customer_detail::where('nuban', '=', $request->input('nuban11'))->co
 
 
 
-     public function tillbal(){
-         $tellercode = Auth::user()->tellercode; 
-
-
-        $balcredit = DB::table('gl_ledgers')
-        ->where('gl_code', '=', $tellercode)
-        ->where('deleted', '=', 'N')
-        ->sum('credit');
-    
-        $baldebit = DB::table('gl_ledgers')
-        ->where('gl_code', '=', $tellercode)
-        ->where('deleted', '=', 'N')
-        ->sum('debit');
-
-$tillbal = $baldebit - $balcredit;
-
-$till = number_format($tillbal,2);
-
-return response()->json([
-    'myout' =>  $till,
-]);
-     }
 
 
      public function customerledger(){
@@ -864,6 +851,8 @@ public function bankD(Request $request){
                     'status' => 'cash_tr',
                     'user' => Auth::user()->name,
                     'refno' =>  $deposit2->refno,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => now()
                    
                 ]);
         
@@ -881,6 +870,8 @@ public function bankD(Request $request){
                     'status' => 'cash_tr',
                     'user' => Auth::user()->name,
                     'refno' =>  $deposit2->refno,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => now()
                    
                 ]);
         
@@ -987,6 +978,8 @@ public function bankW(Request $request){
                     'status' => 'cash_tr',
                     'user' => Auth::user()->name,
                     'refno' =>  $deposit2->refno,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => now()
                    
                 ]);
         
@@ -1004,6 +997,8 @@ public function bankW(Request $request){
                     'status' => 'cash_tr',
                     'user' => Auth::user()->name,
                     'refno' =>  $deposit2->refno,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => now()
                    
                 ]);
         
@@ -1105,6 +1100,8 @@ public function specialdebit(Request $request){
                     'status' => 'Special-D',
                     'user' => Auth::user()->name,
                     'refno' =>  $deposit2->refno,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => now()
                    
                 ]);
         
@@ -1122,6 +1119,8 @@ public function specialdebit(Request $request){
                     'status' => 'Special-D',
                     'user' => Auth::user()->name,
                     'refno' =>  $deposit2->refno,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => now()
               
                 ]);
         
@@ -1410,6 +1409,8 @@ public function investmentapproval(Request $request){
             'status' => 'cash_tr',
             'user' => Auth::user()->name,
             'refno' =>  $request->reffd,
+            'created_at' => Carbon::now(),
+            'updated_at' => now()
            
         ]);
 
@@ -1476,6 +1477,8 @@ $customer = DB::table('gl_creates')
     'status' => 'cash_tr',
     'user' => Auth::user()->name,
     'refno' =>  $item->ref,
+    'created_at' => Carbon::now(),
+    'updated_at' => now()
    
 ]);
 
@@ -1510,6 +1513,8 @@ $customer2 = DB::table('gl_creates')
     'status' => 'cash_tr',
     'user' => Auth::user()->name,
     'refno' =>  $item->ref,
+    'created_at' => Carbon::now(),
+    'updated_at' => now()
    
 ]);
             
@@ -1542,6 +1547,8 @@ $customer3 = DB::table('gl_creates')
     'status' => 'cash_tr',
     'user' => Auth::user()->name,
     'refno' =>  $item->ref,
+    'created_at' => Carbon::now(),
+    'updated_at' => now()
    
 ]);
 
@@ -1562,54 +1569,6 @@ DB::table('investments')
 }
 }
 
-public function orgreg(){
-    return view('/admin.organization');
-}
-
-public function orgsubmit(Request $request){
-    $field = $request->validate([
-        'company_name' => 'required|string',
-        'email' => 'required|string',
-        'caddress' => 'required|string',
-        'phone' => 'required|string',
-        'rc' => 'required|string',
-  
-       
-    ]);
-
-    $image=$request->logo;
-
-    if($image!=null){
-
-        $extensions = array('png', 'jpg', 'jpeg', 'gif');
-        $file_ext=$image->getClientoriginalExtension();
-			
-		if(in_array($file_ext, $extensions)===false){
-				$error[] = "extension not allowed!";
-
-				}
-
-     if(empty($error)==true){
-    $imagename=time().'.'.$image->getClientoriginalExtension();
-
-    $request->logo->move('uploads', $imagename);
-
-    
-     }
-    }
-
-    $org = organization::create([
-        'company_name' => $field['company_name'],
-        'email' => $field['email'],
-        'address' => $field['caddress'],
-        'phone' => $field['phone'],
-        'rc_no' => $field['rc'],
-        'logo' => $imagename
-        
-    ]);
-
-    return redirect()->back()->with('message', 'Company Registration successfully'); 
-}
 
 public function certgenerate(){
     $cert = DB::table('investments')
@@ -1700,6 +1659,8 @@ DB::table('gl_ledgers')->insert([
     'status' => $statusL,
     'user' => Auth::user()->name,
     'refno' =>  $request->refrev,
+    'created_at' => Carbon::now(),
+    'updated_at' => now()
    
 ]);
 
@@ -1709,7 +1670,9 @@ DB::table('reversals')->insert([
     'nuban' => $request->nubanrev,
     'credit' => $request->creditrev,
     'accttype' => $request->accttype,
-    'status' => $statusL 
+    'status' => $statusL,
+    'created_at' => Carbon::now(),
+    'updated_at' => now()
 ]);
 
 // $out = DB::table('customer_details')
@@ -1748,6 +1711,122 @@ DB::table('reversals')->insert([
 }
 }
 
+public function createaccesstype(){
+    $output = DB::table('accesstypes')
+    ->where('access','!=', 1)
+    ->get();
+    return view('admin.createaccesstype', compact("output"));
+}
+
+
+
+public function insertaccess(Request $req){
+    $req->validate([
+        'code' => ['required'],
+        'access' => ['required'],
+        
+    ]);
+
+
+    $check0=DB::table('accesstypes')
+        ->where('code','=',$req->code)
+        ->orwhere('access','=',$req->access)
+        ->count();
+   if($check0 >= 1){
+    return redirect()->back()->with('message_warning', 'Access type or access code already exist'); 
+   }  else{
+    $check1=DB::table('accesstypes')
+    ->insert([
+        'code' => $req->code,
+        'access' => $req->access,
+        'postingM' =>$req->postingM,
+        'userM' =>$req->userM,
+        'tellerM' =>$req->tellerM,
+        'accountM' =>$req->accountM,
+        'glM' =>$req->glM,
+        'investmentM' =>$req->investmentM,
+        'loanM' =>$req->loanM,
+        'transferM' =>$req->intraT,
+        'approvalM' =>$req->approvalM,
+        'reversalM' =>$req->reversalM,
+        'reportM' =>$req->reportM,
+        'created_at' => Carbon::now(),
+      'updated_at' => now()
+    ]);
+if($check1==true){
+    return redirect()->back()->with('message', 'Access type created Successfully'); 
+}else{
+    return redirect()->back()->with('message_failed', 'Failed'); 
+}
+   }
+   
+
+}
+
+public function accesstype(){
+    $output = DB::table('users')
+    ->where('accesstype', '!=', 1)
+    ->where('active', '!=', 0)
+    ->get();
+    $access = DB::table('accesstypes')
+    ->where('access','!=', 1)
+    ->get();
+    return view('admin.accesstype', compact('output','access'));
+}
+
+public function addaccesstouser(Request $req){
+    $result = DB::table('users')
+        ->where('id','=',$req->id)
+        ->update([
+            'accesstype' => $req->code
+        ]);
+    if($result==true){
+        return redirect()->back()->with('message', 'Access type added Successfully'); 
+    }else{
+        return redirect()->back()->with('message_failed', 'Failed: You are either updating user with the same access type'); 
+    }
+}
+
+
+public function birthday(){
+    $date = Strtotime(now());
+    $result = date('m-d', $date);
+    $out = DB::table('customer_details')
+             ->where(DB::raw("(DATE_FORMAT(dob, '%m-%d'))"),'=', $result)
+            ->get();
+
+            foreach($out as $item){
+                $tel=$item->tel;
+                ///sms sending .................................
+    
+    $owneremail="lollypee4god@gmail.com";
+                    $subacct="METRO";
+                    $subacctpwd="better";
+                    $sendto=$tel; /* destination number */
+                    $sender="MetroLend"; /* sender id */
+                    $message='Happy birthday to one of our most important clients of all time.Metro Lending celebrates with you.'; /* message to be sent */
+                    /* create the required URL */
+                    $url = "http://www.smslive247.com/http/index.aspx?"
+                    . "cmd=sendquickmsg"
+                    . "&owneremail=" . UrlEncode($owneremail)
+                    . "&subacct=" . UrlEncode($subacct)
+                    . "&subacctpwd=" . UrlEncode($subacctpwd)
+                    . "&message=" . UrlEncode($message)
+                    . "&sender=" . UrlEncode($sender)
+                    .  "&sendto=" . UrlEncode($sendto);
+                    /* call the URL */
+                    if ($f = @fopen($url, "r"))
+                    {
+                    $answer = fgets($f, 255);
+                    if (substr($answer, 0, 1) == "+")
+                    {
+                   // echo "SMS to $dnr was successful.";
+                    } 
+                            
+                            
+                        }
+            }
+}
         
 //testing code for checkview.................
 
